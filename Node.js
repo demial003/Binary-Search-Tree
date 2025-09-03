@@ -1,6 +1,6 @@
-export const Node = (value = null) => {
+export const Node = (data = null) => {
   let left = null;
   let right = null;
 
-  return { value, left, right };
+  return { data, left, right };
 };
