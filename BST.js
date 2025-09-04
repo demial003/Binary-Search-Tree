@@ -1,6 +1,11 @@
 import { Node } from "./Node.js";
+import { mergeSort } from "./MergeSort.js";
 
 const BST = (arr) => {
+  const parseArray = (arr) => {
+    return [...new Set(arr)];
+  };
+
   const buildTree = (array) => {
     if (array.length === 0) {
       return null;
@@ -17,7 +22,7 @@ const BST = (arr) => {
     return root;
   };
 
-  let root = buildTree(arr);
+  let root = buildTree(parseArray(mergeSort(arr)));
 
   const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -54,6 +59,6 @@ const BST = (arr) => {
   return { prettyPrint, root, insert };
 };
 
-const x = BST([1, 2, 3, 4, 5, 6, 7]);
+const x = BST([7, 6, 5, 4, 3, 2, 1]);
 
 x.prettyPrint(x.root);
