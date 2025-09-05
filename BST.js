@@ -40,25 +40,69 @@ const BST = (arr) => {
   const insert = (value) => {
     let newNode = Node(value);
     let curr = root;
+    let parent = null;
 
-    while (curr.left || curr.right) {
+    while (curr) {
+      parent = curr;
       if (newNode.data <= curr.data) {
         curr = curr.left;
       } else {
         curr = curr.right;
       }
     }
-    if (newNode.data <= curr.data) {
-      curr.left = newNode;
+    if (value <= parent.data) {
+      parent.left = newNode;
     } else {
-      curr.right = newNode;
+      parent.right = newNode;
     }
     return curr;
   };
 
-  return { prettyPrint, root, insert };
+  const deleteItem = (value) => {
+    let target = root;
+    let parent = null;
+
+    while (target && target.data !== value) {
+      parent = target;
+      if (value <= target.data) {
+        target = target.left;
+      } else {
+        target = target.right;
+      }
+    }
+
+    let succ;
+
+    if (target.right) {
+      succ = target.right;
+    } else {
+      succ = target;
+    }
+
+    while (succ !== null && succ.left !== null) {
+      parent = succ;
+      succ = succ.left;
+    }
+
+    if (target.left || target.right) {
+      target.data = succ.data;
+    }
+    if (parent.left.data === succ.data) {
+      parent.left = null;
+    } else {
+      parent.right = null;
+    }
+  };
+
+  const swap = (succ, parent) => {};
+
+  return { prettyPrint, root, insert, deleteItem };
 };
 
-const x = BST([7, 6, 5, 4, 3, 2, 1]);
+const x = BST([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+
+x.deleteItem(67);
+x.insert(67);
+x.insert(17);
 
 x.prettyPrint(x.root);
