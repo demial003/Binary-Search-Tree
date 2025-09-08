@@ -94,15 +94,62 @@ const BST = (arr) => {
     }
   };
 
-  const swap = (succ, parent) => {};
+  const levelOrderForEach = (callback) => {
+    if (callback === undefined || typeof callback !== "function") {
+      throw new Error("Must pass callback as a parameter");
+    }
+    if (root === null) return;
+    let curr = root;
+    let q = [];
+    q.push(curr);
 
-  return { prettyPrint, root, insert, deleteItem };
+    while (q.length > 0) {
+      curr = q.shift();
+      callback(curr.data);
+      if (curr.left !== null) q.push(curr.left);
+      if (curr.right !== null) q.push(curr.right);
+    }
+  };
+
+  const inOrder = (callback, node = root) => {
+    if (node === null) return;
+    inorder(callback, node.left);
+    callback(node.data);
+    inOrder(callback, node.right);
+  };
+
+  const preOrder = (callback, node = root) => {
+    if (node === null) return;
+    callback(node.data);
+    preOrder(callback, node.left);
+    preOrder(callback, node.right);
+  };
+
+  const postOrder = (callback, node = root) => {
+    if (node === null) return;
+    postOrder(callback, node.left);
+    postOrder(callback, node.right);
+    callback(node.data);
+  };
+
+  return {
+    prettyPrint,
+    root,
+    insert,
+    deleteItem,
+
+    inOrder,
+
+    preOrder,
+
+    postOrder,
+  };
 };
 
 const x = BST([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 
-x.deleteItem(67);
-x.insert(67);
-x.insert(17);
+x.postOrder((curr) => {
+  console.log(curr);
+});
 
-x.prettyPrint(x.root);
+// x.prettyPrint(x.root);
