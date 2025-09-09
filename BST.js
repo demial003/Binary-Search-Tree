@@ -132,24 +132,33 @@ const BST = (arr) => {
     callback(node.data);
   };
 
+  const find = (value) => {
+    let target = root;
+    while (target && target.data !== value) {
+      if (value <= target.data) {
+        target = target.left;
+      } else {
+        target = target.right;
+      }
+    }
+    return target;
+  };
+
   return {
     prettyPrint,
     root,
     insert,
     deleteItem,
-
     inOrder,
-
+    levelOrderForEach,
     preOrder,
-
     postOrder,
+    find,
   };
 };
 
 const x = BST([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 
-x.postOrder((curr) => {
-  console.log(curr);
-});
+console.log(x.find(67));
 
-// x.prettyPrint(x.root);
+x.prettyPrint(x.root);
