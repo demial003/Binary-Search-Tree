@@ -144,6 +144,21 @@ const BST = (arr) => {
     return target;
   };
 
+  const depth = (value) => {
+    let target = root;
+    let count = 0;
+    while (target && target.data !== value) {
+      if (value <= target.data) {
+        target = target.left;
+      } else {
+        target = target.right;
+      }
+      ++count;
+    }
+    if (target !== null) return count;
+    return null;
+  };
+
   return {
     prettyPrint,
     root,
@@ -154,11 +169,12 @@ const BST = (arr) => {
     preOrder,
     postOrder,
     find,
+    depth,
   };
 };
 
 const x = BST([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 
-console.log(x.find(67));
+console.log(x.depth(99));
 
 x.prettyPrint(x.root);
