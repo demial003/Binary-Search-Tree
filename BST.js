@@ -1,7 +1,7 @@
 import { Node } from "./Node.js";
 import { mergeSort } from "./MergeSort.js";
 
-const BST = (arr) => {
+function BST(arr) {
   const parseArray = (arr) => {
     return [...new Set(arr)];
   };
@@ -24,7 +24,9 @@ const BST = (arr) => {
 
   let root = buildTree(parseArray(mergeSort(arr)));
 
-  const prettyPrint = (node, prefix = "", isLeft = true) => {
+  const getRoot = () => root;
+
+  const prettyPrint = (node = root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
@@ -113,7 +115,7 @@ const BST = (arr) => {
 
   const inOrder = (callback, node = root) => {
     if (node === null) return;
-    inorder(callback, node.left);
+    inOrder(callback, node.left);
     callback(node.data);
     inOrder(callback, node.right);
   };
@@ -159,9 +161,18 @@ const BST = (arr) => {
     return null;
   };
 
+  const rebalance = () => {
+    let res = [];
+    inOrder((curr) => {
+      res.push(curr);
+    });
+
+    root = buildTree(res);
+  };
+
   return {
     prettyPrint,
-    root,
+    getRoot,
     insert,
     deleteItem,
     inOrder,
@@ -170,11 +181,17 @@ const BST = (arr) => {
     postOrder,
     find,
     depth,
+    rebalance,
   };
-};
+}
 
 const x = BST([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+x.insert(17);
+x.insert(18);
+x.insert(19);
+x.insert(20);
+x.prettyPrint();
 
-console.log(x.depth(99));
+x.rebalance();
 
-x.prettyPrint(x.root);
+x.prettyPrint();
