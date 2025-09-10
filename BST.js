@@ -107,7 +107,7 @@ function BST(arr) {
 
     while (q.length > 0) {
       curr = q.shift();
-      callback(curr.data);
+      callback(curr);
       if (curr.left !== null) q.push(curr.left);
       if (curr.right !== null) q.push(curr.right);
     }
@@ -116,13 +116,13 @@ function BST(arr) {
   const inOrder = (callback, node = root) => {
     if (node === null) return;
     inOrder(callback, node.left);
-    callback(node.data);
+    callback(node);
     inOrder(callback, node.right);
   };
 
   const preOrder = (callback, node = root) => {
     if (node === null) return;
-    callback(node.data);
+    callback(node);
     preOrder(callback, node.left);
     preOrder(callback, node.right);
   };
@@ -131,7 +131,7 @@ function BST(arr) {
     if (node === null) return;
     postOrder(callback, node.left);
     postOrder(callback, node.right);
-    callback(node.data);
+    callback(node);
   };
 
   const find = (value) => {
@@ -144,6 +144,26 @@ function BST(arr) {
       }
     }
     return target;
+  };
+
+  const height = (value) => {
+    let l = find(value);
+    let r = find(value);
+    let leftCount = 0;
+    let rightCount = 0;
+    if (l === null) return 0;
+    while (l.left) {
+      l = l.left;
+      ++leftCount;
+    }
+
+    while (r.right) {
+      r = r.right;
+      ++rightCount;
+    }
+
+    if (rightCount > leftCount) return rightCount;
+    return leftCount;
   };
 
   const depth = (value) => {
@@ -164,10 +184,34 @@ function BST(arr) {
   const rebalance = () => {
     let res = [];
     inOrder((curr) => {
-      res.push(curr);
+      res.push(curr.data);
     });
 
     root = buildTree(res);
+  };
+
+  const isBalanced = () => {
+    if (root === null) return true;
+    let balance = true;
+    levelOrderForEach((curr) => {
+      if (!balance) return;
+      if (curr.left) {
+        if (curr.right) {
+          if (Math.abs(height(curr.left.data) - height(curr.right.data)) > 1)
+            balance = false;
+        }
+      }
+    });
+    return balance;
+
+    if (root === null) return true;
+    let lHeight = null;
+    let rHeight = null;
+    lHeight = height(root.left.data);
+    rHeight = height(root.right.data);
+    if (Math.abs(rHeight - lHeight) > 1) return false;
+    return isBalanced(root.left) && isBalanced(root.right);
+    console.log(lHeight, rHeight);
   };
 
   return {
@@ -182,16 +226,12 @@ function BST(arr) {
     find,
     depth,
     rebalance,
+    height,
+    isBalanced,
   };
 }
 
 const x = BST([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-x.insert(17);
-x.insert(18);
-x.insert(19);
-x.insert(20);
-x.prettyPrint();
-
-x.rebalance();
 
 x.prettyPrint();
+console.log(x.isBalanced());
